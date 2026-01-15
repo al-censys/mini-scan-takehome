@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -34,6 +35,7 @@ func loadScansFromJSON(path string) (scans []scanning.Scan, err error) {
  */
 type ProcessScan_MockDB struct {
 	db.MockDB
+	response string // decoded response
 }
 
 func (db *ProcessScan_MockDB) Upsert(r db.Record) (err error) {
@@ -47,6 +49,8 @@ func (db *ProcessScan_MockDB) Upsert(r db.Record) (err error) {
 		err = fmt.Errorf("invalid port number: %d", r.Port)
 		return
 	}
+
+	db.response = r.Description
 
 	return
 }
@@ -65,8 +69,10 @@ func TestProcessScan(t *testing.T) {
 		},
 	}
 
+	store := &ProcessScan_MockDB{}
+
 	p := Processor{
-		store: &ProcessScan_MockDB{},
+		store: store,
 	}
 	err := p.processScan(ctx, scan)
 	assert.NoError(t, err, "p.processScan()")
@@ -76,6 +82,22 @@ func TestProcessScan(t *testing.T) {
 
 	err = p.processScan(ctx, scan)
 	assert.NoError(t, err, "p.processScan()")
+
+	// ensure V1 data are base64-decoded
+	decoded := "hello world"
+	encoded := base64.StdEncoding.EncodeToString([]byte(decoded))
+	require.NoError(t, err, "base64.StdEncoding.EncodeString()")
+
+	scan.DataVersion = scanning.V1
+
+	scan.Data = map[string]interface{}{
+		"response_bytes_utf8": encoded,
+	}
+
+	err = p.processScan(ctx, scan)
+	require.NoError(t, err, "p.processScan()")
+
+	assert.Equal(t, decoded, store.response, "p.processScan()")
 }
 
 /*

@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -55,7 +56,15 @@ func (p *Processor) processScan(ctx context.Context, scan *scanning.Scan) (err e
 	m := scan.Data.(map[string]interface{})
 	switch scan.DataVersion {
 	case scanning.V1:
-		description = m["response_bytes_utf8"].(string)
+		base64Encoded := m["response_bytes_utf8"].(string)
+
+		var decoded []byte
+		decoded, err = base64.StdEncoding.DecodeString(base64Encoded)
+		if err != nil {
+			return
+		}
+
+		description = string(decoded)
 	case scanning.V2:
 		description = m["response_str"].(string)
 	default:
