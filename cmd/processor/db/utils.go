@@ -37,7 +37,7 @@ func IAmNotImplemented() (err error) {
 
 	idx := strings.LastIndex(name, "/") + 1
 
-	err = fmt.Errorf(name[idx:] + " not implemented")
+	err = fmt.Errorf("%s not implemented", name[idx:])
 
 	return
 }
