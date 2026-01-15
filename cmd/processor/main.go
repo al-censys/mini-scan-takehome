@@ -25,7 +25,7 @@ type Processor struct {
 }
 
 func (p *Processor) processScan(ctx context.Context, scan *scanning.Scan) (err error) {
-	slog.Info("processing", scan)
+	slog.Info("processing", "scan", scan)
 
 	ip, err := netip.ParseAddr(scan.Ip)
 	if err != nil {
