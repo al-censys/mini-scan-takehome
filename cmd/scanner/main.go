@@ -64,6 +64,8 @@ func main() {
 			panic(err)
 		}
 
+		fmt.Println("publishing", string(encoded))
+
 		_, err = topic.Publish(ctx, &pubsub.Message{Data: encoded}).Get(ctx)
 		if err != nil {
 			panic(err)

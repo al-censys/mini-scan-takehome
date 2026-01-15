@@ -13,6 +13,14 @@ services:
       timeout: 10s
       retries: 3
 
+  infra-builder-image:
+    image: censys-infra-builder:local
+    build:
+      context: .
+      dockerfile: ./infra/builder/Dockerfile
+
+  # same logic can be applied for a common runtime image.
+
   # Runs the "scanner"
   scanner:
     depends_on:
