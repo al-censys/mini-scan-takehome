@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log/slog"
 	"net/netip"
+	"sync"
 	"time"
 
 	"cloud.google.com/go/pubsub"
@@ -18,6 +19,7 @@ import (
 
 type Processor struct {
 	store db.DB
+	storeLock sync.Mutex
 	subscription Subscription
 }
 
@@ -68,6 +70,9 @@ func (p *Processor) processScan(ctx context.Context, scan *scanning.Scan) (err e
 		Timestamp: timestamp,
 		Description: description,
 	}
+
+	p.storeLock.Lock()
+	defer p.storeLock.Unlock()
 
 	err = p.store.Upsert(record)
 	if err != nil {
