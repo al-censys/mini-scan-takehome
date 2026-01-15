@@ -144,10 +144,18 @@ func main() {
 
 	topic := client.Topic(*topicId)
 
-	sub, err := client.CreateSubscription(ctx, *subscriptionId, pubsub.SubscriptionConfig{
-		Topic:       topic,
-		AckDeadline: 10 * time.Second,
-	})
+	sub := client.Subscription(*subscriptionId)
+	exists, err := sub.Exists(ctx)
+	if err != nil {
+		panic(err)
+	}
+
+	if !exists {
+		sub, err = client.CreateSubscription(ctx, *subscriptionId, pubsub.SubscriptionConfig{
+			Topic:       topic,
+			AckDeadline: 10 * time.Second,
+		})
+	}
 
 	// Init DB
 	store := db.MustInit()

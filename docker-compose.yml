@@ -13,38 +13,23 @@ services:
       timeout: 10s
       retries: 3
 
-  # Creates a topic
-  mk-topic:
-    image: alpine/httpie
-    depends_on:
-      pubsub:
-        condition: service_healthy
-    command: PUT http://pubsub:8085/v1/projects/test-project/topics/scan-topic
-
-  # Creates a subscription
-  mk-subscription:
-    image: alpine/httpie
-    depends_on:
-      mk-topic:
-        condition: service_completed_successfully
-    command: PUT http://pubsub:8085/v1/projects/test-project/subscriptions/scan-sub topic=projects/test-project/topics/scan-topic --ignore-stdin 
-
   # Runs the "scanner"
   scanner:
     depends_on:
-      mk-topic:
-        condition: service_completed_successfully
+      pubsub:
+        condition: service_healthy
     environment:
       PUBSUB_EMULATOR_HOST: pubsub:8085
       PUBSUB_PROJECT_ID: test-project
     build:
       context: .
       dockerfile: ./cmd/scanner/Dockerfile
+
   # Runs the "processor"
   processor:
     depends_on:
-      mk-topic:
-        condition: service_completed_successfully
+      pubsub:
+        condition: service_healthy
     environment:
       PUBSUB_EMULATOR_HOST: pubsub:8085
       PUBSUB_PROJECT_ID: test-project

@@ -28,6 +28,17 @@ func main() {
 	}
 
 	topic := client.Topic(*topicId)
+	exists, err := topic.Exists(ctx)
+	if err != nil {
+		panic(err)
+	}
+
+	if !exists {
+		topic, err = client.CreateTopic(ctx, *topicId)
+		if err != nil {
+			panic(err)
+		}
+	}
 
 	for range time.Tick(time.Second) {
 
