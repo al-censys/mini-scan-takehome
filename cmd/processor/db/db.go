@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	defaultDB = "processor.db"
+	defaultDB = "data/processor.db"
 	latestVersion = 2
 
 	// Initial DB schema, updated on db creation through migrations
