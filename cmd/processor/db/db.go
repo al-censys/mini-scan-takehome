@@ -105,7 +105,7 @@ func (_db *SqliteDB) init() (db DB, err error) {
 	}
 
 	if currentVersion > latestVersion {
-		err = fmt.Errorf("forward compatibility not supporte, database version %d is newer than compiled version %d", currentVersion, latestVersion)
+		err = fmt.Errorf("forward compatibility not supported, database version %d is newer than compiled version %d", currentVersion, latestVersion)
 		return
 	}
 
