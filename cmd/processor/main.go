@@ -25,6 +25,8 @@ type Processor struct {
 }
 
 func (p *Processor) processScan(ctx context.Context, scan *scanning.Scan) (err error) {
+	slog.Info("processing", scan)
+
 	ip, err := netip.ParseAddr(scan.Ip)
 	if err != nil {
 		return
@@ -115,6 +117,7 @@ func (p *Processor) processMessage(ctx context.Context, m *pubsub.Message) {
 }
 
 func (p *Processor) Run(ctx context.Context) (err error) {
+	fmt.Println(p.subscription)
 	err = p.subscription.Receive(ctx, p.processMessage)
 	if err != nil {
 		return
