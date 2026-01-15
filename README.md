@@ -57,8 +57,7 @@ Done.
 > cmd/scanner/main.go should not be modified
 >
 I'll take this as soft "requirement". This is code. There is no limiting licensing restraining modifications, I'm under
-NDA and the current architecture is rather... suboptimal. Especially, there is no reason to create the topic as a
-separate step, increasing the dependency surface, making the whole system more fragile.
+NDA and the current architecture is rather... suboptimal.
 
 I corrected parts which I believed should be corrected, but merely left comment on other parts which were less critical,
 while still being sub-optimal (if not totally wrong).
