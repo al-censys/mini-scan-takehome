@@ -117,7 +117,6 @@ func (p *Processor) processMessage(ctx context.Context, m *pubsub.Message) {
 }
 
 func (p *Processor) Run(ctx context.Context) (err error) {
-	fmt.Println(p.subscription)
 	err = p.subscription.Receive(ctx, p.processMessage)
 	if err != nil {
 		return
