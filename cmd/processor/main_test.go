@@ -61,7 +61,7 @@ func TestProcessScan(t *testing.T) {
 	scan := &scanning.Scan{
 		Ip: "10.0.0.1",
 		Port: 80,
-		Timestamp: time.Now().UnixNano(),
+		Timestamp: time.Now().Unix(),
 		Service: "HTTP",
 		DataVersion: scanning.V2,
 		Data: map[string]interface{}{

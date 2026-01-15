@@ -49,7 +49,7 @@ func (p *Processor) processScan(ctx context.Context, scan *scanning.Scan) (err e
 	// current trivial implemenation lacks error handling infrastructure.
 	port := uint16(scan.Port)
 
-	timestamp := time.Unix(0, scan.Timestamp)
+	timestamp := time.Unix(scan.Timestamp, 0)
 
 	service := scan.Service
 
