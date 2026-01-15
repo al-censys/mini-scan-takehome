@@ -158,6 +158,9 @@ func main() {
 			Topic:       topic,
 			AckDeadline: 10 * time.Second,
 		})
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	// Init DB
