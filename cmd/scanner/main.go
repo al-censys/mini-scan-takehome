@@ -27,17 +27,9 @@ func main() {
 		panic(err)
 	}
 
-	topic := client.Topic(*topicId)
-	exists, err := topic.Exists(ctx)
+	topic, err := scanning.CreateTopic(ctx, client, *topicId)
 	if err != nil {
 		panic(err)
-	}
-
-	if !exists {
-		topic, err = client.CreateTopic(ctx, *topicId)
-		if err != nil {
-			panic(err)
-		}
 	}
 
 	for range time.Tick(time.Second) {

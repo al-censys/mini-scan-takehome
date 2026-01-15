@@ -145,7 +145,10 @@ func main() {
 		panic(err)
 	}
 
-	topic := client.Topic(*topicId)
+	topic, err := scanning.CreateTopic(ctx, client, *topicId)
+	if err != nil {
+		panic(err)
+	}
 
 	sub := client.Subscription(*subscriptionId)
 	exists, err := sub.Exists(ctx)
